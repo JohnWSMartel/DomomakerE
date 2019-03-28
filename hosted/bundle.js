@@ -33,12 +33,21 @@ var DomoForm = function DomoForm(props) {
 			"Name: "
 		),
 		React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
+      
 		React.createElement(
 			"label",
 			{ htmlFor: "age" },
 			"Age: "
 		),
 		React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
+      
+        React.createElement(
+			"label",
+			{ htmlFor: "level" }, //Not sure what goes here
+			"Level: "
+		),
+		React.createElement("input", { id: "domoLevel", type: "text", name: "level", placeholder: "1" }),
+      
 		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
 		React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
 	);
