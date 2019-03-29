@@ -54,12 +54,12 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
 };
 
 DomoSchema.statics.deleteById = (_id, callback) => {
-  const search ={
-    _id:_id,
+  const search = {
+    _id,
   };
-  
+
   DomoModel.deleteOne(search, callback);
-}
+};
 
 DomoModel = mongoose.model('Domo', DomoSchema);
 
