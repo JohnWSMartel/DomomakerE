@@ -43,7 +43,7 @@ var DomoForm = function DomoForm(props) {
       
         React.createElement(
 			"label",
-			{ htmlFor: "level" }, //Not sure what goes here
+			{ htmlFor: "level" },
 			"Level: "
 		),
 		React.createElement("input", { id: "domoLevel", type: "text", name: "level", placeholder: "1" }),
