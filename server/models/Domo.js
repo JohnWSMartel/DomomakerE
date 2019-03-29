@@ -42,7 +42,6 @@ DomoSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
   level: doc.level,
-  _id: doc._id,
 });
 
 
@@ -53,6 +52,14 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
 
   return DomoModel.find(search).select('name age level _id').exec(callback);
 };
+
+DomoSchema.statics.deleteById = (_id, callback) => {
+  const search ={
+    _id:_id,
+  };
+  
+  DomoModel.deleteOne(search, callback);
+}
 
 DomoModel = mongoose.model('Domo', DomoSchema);
 

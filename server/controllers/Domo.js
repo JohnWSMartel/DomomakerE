@@ -56,6 +56,15 @@ const getDomos = (request, response) => {
   });
 };
 
+const deleteDomo = (req, res) => {
+  
+  if(DomoModel.find(req.body._id)){ //if domo has id
+    if(){
+       
+       }
+     }
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
 module.exports.make = makeDomo;
