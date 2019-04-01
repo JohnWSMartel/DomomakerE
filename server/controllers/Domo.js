@@ -57,8 +57,8 @@ const getDomos = (request, response) => {
 };
 
 const deleteDomo = (req, res) => {
-  if (DomoModel.find(req.body._id)) { // if domo has id
-    if (DomoModel.find(req.body._id) === req.session.account._id) { // if user owns domo
+  if (Domo.DomoModel.find(req.body._id)) { // if domo has id
+    if (Domo.DomoModel.find(req.body._id) === req.session.account._id) { // if user owns domo
       return Domo.DomoModel.deleteById(req.session.account._id, (err, docs) => {
         if (err) {
           console.log(err);
