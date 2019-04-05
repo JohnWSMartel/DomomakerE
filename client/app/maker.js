@@ -15,6 +15,18 @@ const handleDomo = (e) => {
 	return false;
 };
 
+const removeDomo = (e) => {
+	e.preventDefault();
+	
+	$("#domoMessage").animate({width: 'hide'},350);
+	
+	sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
+		loadDomosFromServer();
+	});
+	
+	return false;
+};
+
 const DomoForm = (props) => {
 	return (
 		<form id="domoForm"
