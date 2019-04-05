@@ -76,45 +76,47 @@ var DomoList = function DomoList(props) {
 	}
 
 	var domoNodes = props.domos.map(function (domo) {
-		return React.createElement(
-			"form",
-			{ id: "domoList",
-				onSubmit: removeDomo,
-				name: "domoList",
-				action: "/deleteDomo",
-				method: "POST",
-				className: "domoList"
-			},
-			React.createElement(
-				"div",
-				{ key: domo._id, className: "domo" },
-				React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+		sendAjax('GET', '/getToken', null, function (result) {
+			return React.createElement(
+				"form",
+				{ id: "domoList",
+					onSubmit: removeDomo,
+					name: "domoList",
+					action: "/deleteDomo",
+					method: "POST",
+					className: "domoList"
+				},
 				React.createElement(
-					"h3",
-					{ className: "domoName" },
-					" Name: ",
-					domo.name,
-					" "
-				),
-				React.createElement(
-					"h3",
-					{ className: "domoAge" },
-					" Age: ",
-					domo.age,
-					" "
-				),
-				React.createElement(
-					"h3",
-					{ className: "domoLevel" },
-					" Level: ",
-					domo.level,
-					" "
-				),
-				React.createElement("input", { type: "hidden", name: "_id", value: "" }),
-				React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-				React.createElement("input", { type: "submit", value: "Delete Domo" })
-			)
-		);
+					"div",
+					{ key: domo._id, className: "domo" },
+					React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+					React.createElement(
+						"h3",
+						{ className: "domoName" },
+						" Name: ",
+						domo.name,
+						" "
+					),
+					React.createElement(
+						"h3",
+						{ className: "domoAge" },
+						" Age: ",
+						domo.age,
+						" "
+					),
+					React.createElement(
+						"h3",
+						{ className: "domoLevel" },
+						" Level: ",
+						domo.level,
+						" "
+					),
+					React.createElement("input", { type: "hidden", name: "_id", value: "" }),
+					React.createElement("input", { type: "hidden", name: "_csrf", value: result.csrfToken }),
+					React.createElement("input", { type: "submit", value: "Delete Domo" })
+				)
+			);
+		});
 	});
 
 	return React.createElement(
