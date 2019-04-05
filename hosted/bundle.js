@@ -17,6 +17,18 @@ var handleDomo = function handleDomo(e) {
 	return false;
 };
 
+var removeDomo = function removeDomo(e) {
+	e.preventDefault();
+
+	$("#domoMessage").animate({ width: 'hide' }, 350);
+
+	sendAjax('POST', $("#domoList").attr("action"), $("#domoList").serialize(), function () {
+		loadDomosFromServer();
+	});
+
+	return false;
+};
+
 var DomoForm = function DomoForm(props) {
 	return React.createElement(
 		"form",
@@ -33,21 +45,18 @@ var DomoForm = function DomoForm(props) {
 			"Name: "
 		),
 		React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
-      
 		React.createElement(
 			"label",
 			{ htmlFor: "age" },
 			"Age: "
 		),
 		React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
-      
-        React.createElement(
+		React.createElement(
 			"label",
 			{ htmlFor: "level" },
 			"Level: "
 		),
-		React.createElement("input", { id: "domoLevel", type: "text", name: "level", placeholder: "Domo Level" }),
-      
+		React.createElement("input", { id: "domoLevel", type: "text", name: "level", placeholder: "1" }),
 		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
 		React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
 	);
@@ -68,22 +77,42 @@ var DomoList = function DomoList(props) {
 
 	var domoNodes = props.domos.map(function (domo) {
 		return React.createElement(
-			"div",
-			{ key: domo._id, className: "domo" },
-			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+			"form",
+			{ id: "domoList",
+				onSubmit: removeDomo,
+				name: "domoList",
+				action: "/deleteDomo",
+				method: "POST",
+				className: "domoList"
+			},
 			React.createElement(
-				"h3",
-				{ className: "domoName" },
-				" Name: ",
-				domo.name,
-				" "
-			),
-			React.createElement(
-				"h3",
-				{ className: "domoAge" },
-				" Age: ",
-				domo.age,
-				" "
+				"div",
+				{ key: domo._id, className: "domo" },
+				React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+				React.createElement(
+					"h3",
+					{ className: "domoName" },
+					" Name: ",
+					domo.name,
+					" "
+				),
+				React.createElement(
+					"h3",
+					{ className: "domoAge" },
+					" Age: ",
+					domo.age,
+					" "
+				),
+				React.createElement(
+					"h3",
+					{ className: "domoLevel" },
+					" Level: ",
+					domo.level,
+					" "
+				),
+				React.createElement("input", { type: "hidden", name: "_id", value: "" }),
+				React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
+				React.createElement("input", { type: "submit", value: "Delete Domo" })
 			)
 		);
 	});
