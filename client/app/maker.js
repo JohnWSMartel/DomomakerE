@@ -60,7 +60,7 @@ const DomoList = function(props) {
 	const domoNodes = props.domos.map(function(domo) {
 		return (
           <form id="domoList"
-            onSubmit={handleDomo}
+            onSubmit={removeDomo}
             name="domoList"
             action="/deleteDomo"
             method="POST"
