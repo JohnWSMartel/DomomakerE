@@ -20,7 +20,7 @@ const removeDomo = (e) => {
 	
 	$("#domoMessage").animate({width: 'hide'},350);
 	
-	sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
+	sendAjax('POST', $("#domoList").attr("action"), $("#domoList").serialize(), function() {
 		loadDomosFromServer();
 	});
 	
