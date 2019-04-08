@@ -68,7 +68,7 @@ const deleteDomo = (req, res) => {
     Domo.DomoModel.deleteOne({_id:req.body._id}, () => {
         return res.status(200);
     });
-    
+    return res.status(200);
 };
 
 module.exports.makerPage = makerPage;
