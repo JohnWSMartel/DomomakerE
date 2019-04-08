@@ -56,19 +56,19 @@ const getDomos = (request, response) => {
   });
 };
 
+//I had to rewrite this function. The version that was here had a lot wrong with it
 const deleteDomo = (req, res) => {
-  if (Domo.DomoModel.find(req.body._id)) { // if domo has id
-    if (Domo.DomoModel.find(req.body._id) === req.session.account._id) { // if user owns domo
-      return Domo.DomoModel.deleteById(req.session.account._id, (err, docs) => {
-        if (err) {
-          console.log(err);
+    
+    //If they dont have the proper elements in their request, send back a 400
+    if(!req.body._id) {
           return res.status(400).json({ error: 'An error occured' });
-        }
-        return res.json({ domos: docs });
-      });
     }
-  }
-  return res.status(400).json({ error: 'An error occured' });
+    
+    //Otherwise delete the domo and send back a 200 when complete
+    Domo.DomoModel.deleteOne({_id:req.body._id}, () => {
+        return res.status(200);
+    });
+    
 };
 
 module.exports.makerPage = makerPage;

@@ -1,3 +1,15 @@
+const loadDomosFromServer = () => {
+    //Get the token, once that is done get the domos
+    sendAjax('GET', '/getToken', null, (tokenData) => {
+        sendAjax('GET', '/getDomos', null, (data) =>{
+	   	   ReactDOM.render(
+               //Added the csrf token for the very first time we call DomoList
+	   		  <DomoList domos = {data.domos} csrf={tokenData.csrfToken}/>, document.querySelector("#domos")
+	   	   );
+	   }); 
+    });
+};
+
 const handleDomo = (e) => {
 	e.preventDefault();
 	
@@ -16,13 +28,29 @@ const handleDomo = (e) => {
 };
 
 const removeDomo = (e) => {
+    //Refactored remove domo to properly work with how it is being used. It now takes in an
+    //event object. That object represents the specific domo form we are trying to delete.
 	e.preventDefault();
-	
+    
 	$("#domoMessage").animate({width: 'hide'},350);
-	
-	sendAjax('POST', $("#domoList").attr("action"), $("#domoList").serialize(), function() {
-		loadDomosFromServer();
-	});
+    
+    //We can get the id and csrf token from the form and construct our form data from that.
+    const domoId = e.target.querySelector('#_id').defaultValue;
+    const domoCsrf = e.target.querySelector('#csrf').defaultValue;
+    const formData = `_id=${domoId}&_csrf=${domoCsrf}`;
+    
+    //We can construct a request by getting the method (post) and the action (/deleteDomo)
+    //out of the form in the event (e) object.
+    const xhr = new XMLHttpRequest();
+    xhr.open(e.target.method, e.target.action);
+    
+    //Setup our headers
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader ('Accept', 'application/json');
+    
+    //Send the request, and get all the domos from the server so the page refreshes
+    xhr.send(formData);
+    loadDomosFromServer();
 	
 	return false;
 };
@@ -56,8 +84,9 @@ const DomoList = function(props) {
 			</div>
 		);
 	}
-	
+    
 	const domoNodes = props.domos.map(function(domo) {
+        //Added in the domo._id value, and the props.csrf value
       return (
           <form id="domoList"
             onSubmit={removeDomo}
@@ -71,8 +100,8 @@ const DomoList = function(props) {
 				<h3 className="domoName"> Name: {domo.name} </h3>
 				<h3 className="domoAge"> Age: {domo.age} </h3>
                 <h3 className="domoLevel"> Level: {domo.level} </h3>
-                <input type="hidden" name="_id" value="" />
-				<input type="hidden" name="_csrf" value={props.csrf} />
+                <input id="_id" type="hidden" name="_id" value={domo._id} />
+				<input id="csrf" type="hidden" name="_csrf" value={props.csrf} />
                 <input type="submit" value="Delete Domo" />
 			</div>
           </form>
@@ -86,21 +115,15 @@ const DomoList = function(props) {
 	);
 };
 
-const loadDomosFromServer = () => {
-	sendAjax('GET', '/getDomos', null, (data) =>{
-		ReactDOM.render(
-			<DomoList domos = {data.domos}/>, document.querySelector("#domos")
-		);
-	});
-};
 
 const setup = function(csrf){
 	ReactDOM.render(
 		<DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
 	);
 	
+    // When we render the page, we need to add csrf={csrf} to add the token to the props object
 	ReactDOM.render(
-		<DomoList domos={[]} />, document.querySelector("#domos")
+		<DomoList domos={[]} csrf={csrf} />, document.querySelector("#domos")
 	);
 	
 	loadDomosFromServer();
